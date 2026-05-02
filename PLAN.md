@@ -6,14 +6,14 @@ CSV input → orchestrator → classifier → corpus router →
 retriever (ChromaDB) → safety gate → LLM → CSV output
 
 ## Current status
-- [x] agent_orchestrator.py — complete
-- [ ] scraper.py
-- [ ] retriever.py
-- [ ] classifier.py
-- [ ] safety.py
-- [ ] pipeline.py
-- [ ] prompts.py
-
+- [x] agent_orchestrator.py
+- [x] scraper.py
+- [x] retriever.py
+- [x] classifier.py
+- [x] safety.py
+- [x] pipeline.py
+- [x] prompts.py
+- [x] End to end test ✅
 ## Remaining work
 Build modules in this order:
 1. scraper.py
