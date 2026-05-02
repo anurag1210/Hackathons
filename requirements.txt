@@ -1,2 +1,9 @@
-nltk
 click
+pandas
+requests
+beautifulsoup4
+langchain-chroma
+langchain-openai 
+openai
+python-dotenv 
+chromadb

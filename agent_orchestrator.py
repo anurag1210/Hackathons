@@ -1,25 +1,10 @@
 #Agent Orchestrator.py file to Orchestrate the entire Agent Framework to call all the differnt functionality
 import click
 import pandas as pd
-# Stub — replace with real import once retriever.py is built
-# from retriever import init_vectorstore
-# from pipeline import run_pipeline
+from scraper import build_corpus as run_build_corpus
+from retriever import init_vectorstore
+from pipeline import run_pipeline
 
-def init_vectorstore():
-    """Stub — returns None until retriever.py is wired up."""
-    click.echo("[stub] init_vectorstore — retriever.py not yet built")
-    return None
-
-def run_pipeline(row, vectorstore):
-    """Stub — returns placeholder output until pipeline.py is wired up."""
-    click.echo(f"[stub] run_pipeline — processing ticket: {row.get('Subject', 'unknown')}")
-    return {
-        "status": "escalated",
-        "product_area": "unknown",
-        "response": "Pipeline not yet implemented.",
-        "justification": "Stub response from run_pipeline.",
-        "request_type": "invalid",
-    }
 
 @click.command()
 @click.option("--input","input_path",required=True,type=click.Path(exists=True, dir_okay=False),help="Path to the input tickets CSV.")
@@ -37,7 +22,8 @@ def main(input_path, output_path, build_corpus, verbose):
     click.echo(f"Verbose: {verbose}")
 
     if build_corpus:
-        click.echo("Rebuilding vectorstore...")
+        click.echo("[*] Building corpus...")
+        run_build_corpus()
 
     if verbose:
         click.echo("Verbose logging enabled.")
@@ -52,7 +38,7 @@ def main(input_path, output_path, build_corpus, verbose):
     df["Company"] = df["Company"].replace("none", "unknown")
     
     click.echo("[*] Initialising vectorstore...")
-    vectorstore = init_vectorstore()
+    vectorstore = init_vectorstore(build_corpus=build_corpus)
 
     results = []
 
@@ -62,7 +48,7 @@ def main(input_path, output_path, build_corpus, verbose):
         click.echo(f"[{i}/{total_tickets}] Processing...")
 
         try:
-            result = run_pipeline(row, vectorstore)
+            result = run_pipeline(row, vectorstore, verbose=verbose)
             results.append(result)
 
             if verbose:
